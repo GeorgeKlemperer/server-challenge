@@ -30,7 +30,9 @@ server.get("/colour", (request, response) => {
 const cheeses = [];
 
 server.get("/cheese", (request, response) => {
-  const cheeseList = cheeses.map((cheese) => `<li>${cheese}</li>`).join("");
+  const cheeseList = cheeses
+    .map((cheese) => `<li>${cheese.name} | ${cheese.rating} stars</li>`)
+    .join("");
 
   const html = `
     <form action="/cheese" method="post">
@@ -57,7 +59,13 @@ const bodyParser = express.urlencoded();
 server.post("/cheese", bodyParser, (request, response) => {
   const cheeseName = request.body.name;
   const cheeseRating = request.body.rating;
-  const cheese = cheeseName + " | " + cheeseRating;
+
+  // Create a cheese object
+  const cheese = {
+    name: cheeseName,
+    rating: cheeseRating,
+  };
+
   cheeses.push(cheese);
 
   response.redirect(`/cheese`);
